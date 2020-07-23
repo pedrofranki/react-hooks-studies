@@ -1,26 +1,56 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
+import { TextField } from '@material-ui/core';
+import {Field, reduxForm} from 'redux-form';
+import {connect} from 'react-redux'
 
-function App() {
+
+const renderTextField = ({
+  label,
+  input,
+  meta: { touched, invalid, error },
+  ...custom
+}) => (
+  <TextField
+    label={label}
+    placeholder={label}
+    error={touched && invalid}
+    helperText={touched && error}
+    {...input}
+    {...custom}
+  />
+)
+
+function App(props) {
+  const [title, setTitle] = useState('');
+
+  const submitForm = (values) =>{
+    
+    setTitle(values.teste)    
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+
+      <h1>{title}</h1>
+      <form onSubmit={props.handleSubmit(submitForm)}>
+        <Field 
+          component={renderTextField}
+          label={'Teste'}
+          type="text"
+          name="teste"
+          id="teste"
+        />
+
+        <button type="submit"> Submit </button>
+      </form>
+
     </div>
   );
 }
 
-export default App;
+const TestRedux = connect(null,null)(reduxForm({form: 'teste'})(App))
+
+
+export default TestRedux;
+
+
